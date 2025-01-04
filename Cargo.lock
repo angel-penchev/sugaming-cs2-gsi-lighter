@@ -434,7 +434,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morally-ambiguous-farm-simulator-2024"
+name = "sugaming-cs2-gsi-lighter"
 version = "0.1.0"
 dependencies = [
  "gsi-cs2",
