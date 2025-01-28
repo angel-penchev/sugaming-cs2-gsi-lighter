@@ -4,13 +4,13 @@ build:
 	cargo build -Zbuild-std --release --target aarch64-unknown-linux-gnu
 
 kill:
-	ssh tsb@192.168.4.224 "killall sugaming-cs2-gsi-lighter || true"
+	ssh ${RPI_USERNAME}@${RPI_IP_ADDRESS} "killall sugaming-cs2-gsi-lighter || true"
 
 deploy:
-	scp target/aarch64-unknown-linux-gnu/release/sugaming-cs2-gsi-lighter tsb@192.168.4.224:~
+	scp target/aarch64-unknown-linux-gnu/release/sugaming-cs2-gsi-lighter ${RPI_USERNAME}@${RPI_IP_ADDRESS}:~
 
 run:
-	ssh tsb@192.168.4.224 "cd /home/tsb && ./sugaming-cs2-gsi-lighter"
+	ssh ${RPI_USERNAME}@${RPI_IP_ADDRESS} "cd ~ && ./sugaming-cs2-gsi-lighter"
 
 clean:
 	cargo clean
