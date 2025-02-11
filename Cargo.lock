@@ -741,7 +741,9 @@ name = "sugaming-cs2-gsi-lighter"
 version = "0.1.0"
 dependencies = [
  "gsi-cs2",
+ "once_cell",
  "poem",
+ "serde",
  "serde_json",
  "tokio",
  "tracing-subscriber",
