@@ -1,4 +1,4 @@
-use crate::led::blink;
+use crate::led::{blink, timed_blink};
 use serde::{Deserialize, Serialize};
 use tokio::task::JoinHandle;
 
@@ -96,55 +96,42 @@ impl RoundManager {
 
 async fn freezetime_function() {
     println!("Entering Freezetime Phase");
-    loop {
-        println!("Freezetime function running...");
-        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-        println!("Freezetime function ending...");
-    }
+    println!("Freezetime function running...");
+    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+    println!("Freezetime function ending...");
 }
 
 async fn live_function() {
     println!("Entering Live Phase");
-    loop {
-        println!("Live function running...");
-        blink();
-        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-        println!("Live function ending...");
-    }
+    println!("Live function running...");
+    blink();
+    println!("Live function ending...");
 }
 
 async fn bomb_planted_function() {
     println!("Bomb Planted!");
-    loop {
-        println!("Bomb planted function running...");
-        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-        println!("Bomb planted function ending...");
-    }
+    println!("Bomb planted function running...");
+    timed_blink(40000);
+    println!("Bomb planted function ending...");
 }
 
 async fn bomb_defused_function() {
     println!("Bomb Defused!");
-    loop {
-        println!("Bomb defused function running...");
-        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-        println!("Bomb defused function ending...");
-    }
+    println!("Bomb defused function running...");
+    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+    println!("Bomb defused function ending...");
 }
 
 async fn bomb_exploded_function() {
     println!("Bomb Exploded!");
-    loop {
-        println!("Bomb exploded function running...");
-        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-        println!("Bomb exploded function ending...");
-    }
+    println!("Bomb exploded function running...");
+    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+    println!("Bomb exploded function ending...");
 }
 
 async fn round_over_function() {
     println!("Round Over");
-    loop {
-        println!("Round over function running...");
-        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-        println!("Round over function ending...");
-    }
+    println!("Round over function running...");
+    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+    println!("Round over function ending...");
 }
