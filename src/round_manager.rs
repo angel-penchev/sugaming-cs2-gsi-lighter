@@ -1,3 +1,4 @@
+use crate::led::blink;
 use serde::{Deserialize, Serialize};
 use tokio::task::JoinHandle;
 
@@ -106,6 +107,7 @@ async fn live_function() {
     println!("Entering Live Phase");
     loop {
         println!("Live function running...");
+        blink();
         tokio::time::sleep(std::time::Duration::from_secs(5)).await;
         println!("Live function ending...");
     }

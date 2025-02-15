@@ -1,3 +1,4 @@
+pub mod led;
 pub mod round_manager;
 
 use poem::{handler, listener::TcpListener, post, web::Json, Route, Server};
