@@ -5,7 +5,8 @@ use ws281x_rpi::Ws2812Rpi;
 
 const PIN: i32 = 18; // SPI GPIO 10 Pin, PCM_DOUT GPIO 21 Pin
 const NUM_LEDS: usize = 60 * 5; // 60 LEDs per meter, 5 meters
-const DELAY: time::Duration = time::Duration::from_millis(1000);
+const DELAY: time::Duration = time::Duration::from_millis(20);
+const LONG_DELAY: time::Duration = time::Duration::from_millis(1000);
 
 pub fn blink() {
     println!("blink start...");
@@ -43,12 +44,12 @@ pub fn blink() {
         // On
         println!("blink(): LEDS on");
         ws.write(data.iter().cloned()).unwrap();
-        thread::sleep(DELAY);
+        thread::sleep(LONG_DELAY);
 
         // Off
         println!("blink(): LEDS off");
         ws.write(empty.iter().cloned()).unwrap();
-        thread::sleep(DELAY);
+        thread::sleep(LONG_DELAY);
     }
 }
 
@@ -82,7 +83,7 @@ pub fn timed_blink(duration_ms: u64) {
             println!("timed_blink(): LEDS solid red");
             ws.write(red_data.iter().cloned()).unwrap();
             thread::sleep(Duration::from_millis(remaining_ms)); //Sleep for the remaining time
-            break; //Exit the loop since the remaining time is handled.
+            break;
         }
 
         // On
@@ -96,4 +97,36 @@ pub fn timed_blink(duration_ms: u64) {
         thread::sleep(Duration::from_millis(delay_ms));
     }
     println!("timed_blink finished.");
+}
+
+fn color_wheel(position: u8) -> RGB8 {
+    let pos = position as u16;
+    let (r, g, b) = if pos < 85 {
+        (255 - pos * 3, pos * 3, 0)
+    } else if pos < 170 {
+        (0, 255 - (pos - 85) * 3, (pos - 85) * 3)
+    } else {
+        ((pos - 170) * 3, 0, 255 - (pos - 170) * 3)
+    };
+    RGB8 {
+        r: r as u8,
+        g: g as u8,
+        b: b as u8,
+    }
+}
+
+pub fn rgb_cycle() {
+    println!("RGB cycle start...");
+    let mut ws = Ws2812Rpi::new(NUM_LEDS as i32, PIN).unwrap();
+    let mut data: [RGB8; NUM_LEDS] = [RGB8::default(); NUM_LEDS];
+
+    let mut pos: u8 = 0;
+    loop {
+        for (i, led) in data.iter_mut().enumerate() {
+            *led = color_wheel(((pos as usize + i * 5) % 256) as u8);
+        }
+        ws.write(data.iter().cloned()).unwrap();
+        thread::sleep(DELAY);
+        pos = pos.wrapping_add(1);
+    }
 }

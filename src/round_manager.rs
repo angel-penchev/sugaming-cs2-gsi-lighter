@@ -1,4 +1,4 @@
-use crate::led::{blink, timed_blink};
+use crate::led::{blink, rgb_cycle, timed_blink};
 use serde::{Deserialize, Serialize};
 use tokio::task::JoinHandle;
 
@@ -60,34 +60,22 @@ impl RoundManager {
         // Start a new task based on the new phase
         match new_phase {
             RoundPhase::Freezetime => {
-                self.current_task = Some(tokio::spawn(async {
-                    freezetime_function().await;
-                }));
+                self.current_task = Some(tokio::spawn(freezetime_function()));
             }
             RoundPhase::Live => {
-                self.current_task = Some(tokio::spawn(async {
-                    live_function().await;
-                }));
+                self.current_task = Some(tokio::spawn(live_function()));
             }
             RoundPhase::BombPlanted => {
-                self.current_task = Some(tokio::spawn(async {
-                    bomb_planted_function().await;
-                }));
+                self.current_task = Some(tokio::spawn(bomb_planted_function()));
             }
             RoundPhase::BombDefused => {
-                self.current_task = Some(tokio::spawn(async {
-                    bomb_defused_function().await;
-                }));
+                self.current_task = Some(tokio::spawn(bomb_defused_function()));
             }
             RoundPhase::BombExploded => {
-                self.current_task = Some(tokio::spawn(async {
-                    bomb_exploded_function().await;
-                }));
+                self.current_task = Some(tokio::spawn(bomb_exploded_function()));
             }
             RoundPhase::Over => {
-                self.current_task = Some(tokio::spawn(async {
-                    round_over_function().await;
-                }));
+                self.current_task = Some(tokio::spawn(round_over_function()));
             }
         }
         self.current_phase = Some(new_phase);
@@ -97,7 +85,7 @@ impl RoundManager {
 async fn freezetime_function() {
     println!("Entering Freezetime Phase");
     println!("Freezetime function running...");
-    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+    rgb_cycle();
     println!("Freezetime function ending...");
 }
 
